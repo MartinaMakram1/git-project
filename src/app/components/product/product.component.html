@@ -1,0 +1,46 @@
+
+
+<h1 class="mx-5 pe-5">{{storeData.name}}</h1>
+
+
+
+<div class="row mx-5">
+  <div class="dropdown mx-3 my-2">
+    <select [(ngModel)]="listFilter">
+      <option *ngFor="let category of categoriesList"  [value]="category.name">{{category.name}}</option>
+  
+    </select>
+  </div>
+  <div class="col-sm-4 mb-3 " *ngFor="let product of filteredProducts"
+   [ngClass]="{'bg-warning':product.quantity==1 ,'text-secondary':product.quantity==0}" >
+
+    <img [src]="product.imgUrl" class="img-fluid " *ngIf="IsPurshased" appDivStyle="15px" property1="25px">
+    <h4 class="p-3">{{product.name|uppercase}}</h4>
+    <h5 class="px-3"> {{product.price|currency:'EGP'}}</h5>
+    <h5 class="px-3">{{product.quantity}} piece</h5>
+
+    <!-- ngcontainer , ng template -->
+    <ng-container *ngIf="product.price>1000; else outerReference">
+      <h6 class="px-3">Free Shipping !</h6>
+    </ng-container>
+    <ng-template #outerReference>
+      <h6 class="px-3">50 shipping</h6>
+    </ng-template>
+
+    <!-- ngswitch -->
+    <div [ngSwitch]="product.quantity" class="px-3">
+      <div *ngSwitchCase="1">Last one item</div>
+      <div *ngSwitchCase="2">Last two item</div>
+      <div *ngSwitchCase="0">Out of stock</div>
+      <div *ngSwitchDefault>In stock</div>
+    </div>
+    <button class="btn btn-danger mx-3" [disabled]="product.quantity==0" (click)="toggleImage();decreaseProductQuantity(product)"
+     ><i class="fa-solid fa-cart-shopping"></i>Buy now </button>
+
+    <div *ngIf="!IsPurshased" class="text-success">
+      Thanks for purchasing from our Store, {{ clientName }}!
+    </div>
+  </div>
+</div>
+
+
